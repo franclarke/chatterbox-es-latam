@@ -9,7 +9,6 @@ import torch
 import torchaudio
 from datasets import load_dataset, Dataset, DatasetDict
 from torch.utils.data import DataLoader
-import soundfile as sf
 
 
 class OrpheusDataset:

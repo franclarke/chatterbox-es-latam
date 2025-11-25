@@ -140,8 +140,7 @@ class ChatterboxLoRATrainer:
         self.peft_model = get_peft_model(self.model, peft_config)
         
         # Print trainable parameters
-        trainable_params, all_params = self.peft_model.get_nb_trainable_parameters()
-        print(f"Trainable parameters: {trainable_params:,} / {all_params:,} ({100 * trainable_params / all_params:.2f}%)")
+        self.peft_model.print_trainable_parameters()
         
     def load_dataset(self) -> Dataset:
         """Load and prepare the training dataset."""
@@ -269,6 +268,11 @@ class ChatterboxLoRATrainer:
         
         # Forward through model - architecture dependent
         # This is a placeholder that should be adapted for Chatterbox
+        device = self.accelerator.device if self.accelerator else torch.device("cpu")
+        
+        if audio is None:
+            return {"loss": torch.tensor(0.0, device=device)}
+        
         if hasattr(self.peft_model, "forward"):
             try:
                 outputs = self.peft_model(audio)
@@ -278,12 +282,12 @@ class ChatterboxLoRATrainer:
                     return {"loss": outputs.loss, "outputs": outputs}
                 else:
                     # Compute a reconstruction loss if model doesn't provide one
-                    return {"loss": torch.tensor(0.0, device=audio.device), "outputs": outputs}
+                    return {"loss": torch.tensor(0.0, device=device), "outputs": outputs}
             except Exception as e:
                 print(f"Forward pass error: {e}")
-                return {"loss": torch.tensor(0.0)}
+                return {"loss": torch.tensor(0.0, device=device)}
         
-        return {"loss": torch.tensor(0.0)}
+        return {"loss": torch.tensor(0.0, device=device)}
     
     def _save_checkpoint(self, output_dir: str, step: int):
         """Save a training checkpoint."""

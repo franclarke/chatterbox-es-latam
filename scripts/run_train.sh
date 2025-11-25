@@ -74,7 +74,7 @@ if [ -d "venv" ]; then
 fi
 
 # Install requirements if needed
-if ! python -c "import torch" 2>/dev/null; then
+if ! python -c "import torch; import transformers; import peft" 2>/dev/null; then
     echo "Installing requirements..."
     pip install -r requirements.txt
 fi
