@@ -1,4 +1,3 @@
-```bash
 #!/bin/bash
 
 # Exit on error
@@ -40,7 +39,4 @@ pip install -r requirements.txt
 
 # Run training with logging
 echo "Starting training..."
-# Use stdbuf to unbuffer output so it appears in log immediately
 stdbuf -oL python -m src.lora_es_latam 2>&1 | tee logs/train_log.txt
-
-echo "Training completed. Log saved to logs/train_log.txt"
