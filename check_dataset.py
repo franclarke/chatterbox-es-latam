@@ -58,7 +58,11 @@ def calculate_statistics(examples: list) -> dict:
     # Calculate duration statistics
     durations = []
     for ex in examples:
-        duration = ex.get("duration") or ex.get("duracion") or ex.get("duration_seconds")
+        duration = None
+        for key in ("duration", "duracion", "duration_seconds"):
+            if key in ex and ex[key] is not None:
+                duration = ex[key]
+                break
         if duration is not None:
             try:
                 durations.append(float(duration))
@@ -81,12 +85,11 @@ def calculate_statistics(examples: list) -> dict:
     # Calculate nationality distribution
     nationalities = []
     for ex in examples:
-        nationality = (
-            ex.get("nationality")
-            or ex.get("nacionalidad")
-            or ex.get("country")
-            or ex.get("pais")
-        )
+        nationality = None
+        for key in ("nationality", "nacionalidad", "country", "pais"):
+            if key in ex and ex[key] is not None and ex[key] != "":
+                nationality = ex[key]
+                break
         if nationality:
             nationalities.append(nationality.upper())
     
@@ -101,9 +104,9 @@ def calculate_statistics(examples: list) -> dict:
             for nat, count in sorted(nationality_counts.items(), key=lambda x: -x[1])
         }
         
-        # Calculate AR percentage specifically
-        ar_count = nationality_counts.get("AR", 0)
-        stats["ar_percentage"] = (ar_count / total_with_nationality) * 100 if total_with_nationality > 0 else 0.0
+        # Extract AR percentage from distribution
+        ar_data = stats["nationality_distribution"].get("AR")
+        stats["ar_percentage"] = ar_data["percentage"] if ar_data else 0.0
     
     return stats
 
