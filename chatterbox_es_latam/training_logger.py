@@ -64,8 +64,11 @@ class TrainingLogger:
     ) -> None:
         """Log training metrics if at a logging interval.
 
+        Logs at step 0 and then every `log_every_n_batches` steps.
+
         Args:
-            step: Current training step/batch number (0-indexed).
+            step: Current training step/batch number (0-indexed). Step 0
+                always logs regardless of interval.
             loss: Current loss value.
             lr: Current learning rate.
             total_steps: Optional total number of steps for progress display.
