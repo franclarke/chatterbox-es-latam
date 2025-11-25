@@ -1,0 +1,57 @@
+# Chatterbox ES-LATAM Training Configuration
+# LoRA fine-tuning for ResembleAI/chatterbox-multilingual
+# Dataset: GianDiego/latam-spanish-speech-orpheus-tts-24khz
+
+# Model configuration
+model:
+  name: "ResembleAI/chatterbox-multilingual"
+  cache_dir: null  # Set to local path for caching
+
+# LoRA configuration
+lora:
+  r: 16                    # LoRA rank
+  alpha: 32                # LoRA alpha (scaling factor)
+  dropout: 0.05            # Dropout rate
+  target_modules:          # Modules to apply LoRA to
+    - "q_proj"
+    - "v_proj"
+    - "k_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+# Training configuration
+training:
+  batch_size: 4
+  epochs: 3
+  learning_rate: 1.0e-4
+  weight_decay: 0.01
+  warmup_steps: 100
+  gradient_accumulation_steps: 4
+  mixed_precision: "fp16"  # Options: "no", "fp16", "bf16"
+  save_steps: 500
+  logging_steps: 10
+  max_grad_norm: 1.0
+
+# Data configuration
+data:
+  dataset_name: "GianDiego/latam-spanish-speech-orpheus-tts-24khz"
+  split: "train"
+  sample_rate: 24000
+  max_audio_length: 30.0   # Maximum audio length in seconds
+  num_workers: 4
+  cache_dir: null          # Set to local path for caching
+
+# Output configuration
+output:
+  output_dir: "./output"
+  save_lora_weights: true
+  save_merged_model: true
+  push_to_hub: false       # Set to true to push to HuggingFace Hub
+  hub_model_id: null       # Required if push_to_hub is true
+
+# Runpod deployment configuration
+runpod:
+  model_name: "chatterbox-es-latam"
+  description: "Chatterbox multilingual fine-tuned for LATAM Spanish TTS"
