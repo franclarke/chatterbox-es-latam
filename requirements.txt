@@ -4,7 +4,7 @@ numpy>=1.26.0
 librosa
 datasets==2.21.0
 tqdm
-matplotlib
+matplotlib>=3.5.0
 huggingface_hub
 chatterbox-tts
 soundfile

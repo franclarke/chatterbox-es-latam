@@ -25,7 +25,7 @@ from chatterbox.models.voice_encoder import VoiceEncoder
 from chatterbox.models.t3.modules.cond_enc import T3Cond
 
 # Import custom dataset
-from dataset_orpheus import HFOrpheusDataset
+from .dataset_orpheus import HFOrpheusDataset
 
 # Add matplotlib imports for metrics tracking
 import matplotlib
@@ -660,12 +660,15 @@ def main():
     for col in required_cols:
         if col not in hf_ds.column_names:
             raise ValueError(f"Missing required column: {col}")
-    
     # Filter for Argentina if nationality column exists
     if "nationality" in hf_ds.column_names:
         initial_len = len(hf_ds)
-        hf_ds = hf_ds.filter(lambda x: x.get("nationality") == "AR")
+        print(f"Available nationalities: {set(hf_ds['nationality'])}")
+        hf_ds = hf_ds.filter(lambda x: x.get("nationality") == "ar")
         print(f"Filtered for AR nationality: {initial_len} -> {len(hf_ds)} samples")
+        if len(hf_ds) == 0:
+            print("WARNING: No AR samples found. Using all LATAM samples instead.")
+            hf_ds = load_dataset("GianDiego/latam-spanish-speech-orpheus-tts-24khz", split="train")
     else:
         print("WARNING: 'nationality' column not found. Using entire dataset.")
 

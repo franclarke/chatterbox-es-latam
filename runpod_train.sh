@@ -23,8 +23,13 @@ fi
 # Activate venv
 source venv/bin/activate
 
+# Install system dependencies for matplotlib
+echo "Installing system dependencies..."
+apt update
+apt install -y pkg-config libfreetype6-dev libpng-dev
+
 # Install dependencies
-echo "Installing dependencies..."
+echo "Installing Python dependencies..."
 pip install --upgrade pip
 pip install "numpy>=1.26.0" cython setuptools wheel soundfile
 # Fix pkuseg by building from source without pre-generated cpp files
