@@ -1,6 +1,6 @@
 torch
 torchaudio
-numpy
+numpy>=1.26.0
 librosa
 datasets==2.21.0
 tqdm

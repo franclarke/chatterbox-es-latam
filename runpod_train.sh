@@ -1,15 +1,24 @@
+```bash
 #!/bin/bash
 
 # Exit on error
 set -e
 
+echo "Setting up environment..."
+
 # Create logs directory
 mkdir -p logs
 
-# Create venv if it doesn't exist
+# Install Python 3.11 if not available
+if ! command -v python3.11 &> /dev/null; then
+    echo "Installing Python 3.11..."
+    apt update && apt install -y python3.11 python3.11-venv python3.11-dev
+fi
+
+# Create virtual environment with Python 3.11
 if [ ! -d "venv" ]; then
-    echo "Creating virtual environment..."
-    python3 -m venv venv
+    echo "Creating virtual environment with Python 3.11..."
+    python3.11 -m venv venv
 fi
 
 # Activate venv
@@ -18,7 +27,7 @@ source venv/bin/activate
 # Install dependencies
 echo "Installing dependencies..."
 pip install --upgrade pip
-pip install numpy cython setuptools wheel soundfile
+pip install "numpy>=1.26.0" cython setuptools wheel soundfile
 # Fix pkuseg by building from source without pre-generated cpp files
 git clone https://github.com/lancopku/pkuseg-python.git pkuseg_tmp
 cd pkuseg_tmp
