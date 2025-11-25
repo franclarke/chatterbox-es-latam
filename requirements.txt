@@ -1,0 +1,3 @@
+# Dependencias para el script de síntesis de audio
+# Instaladas automáticamente con: pip install chatterbox-tts
+chatterbox-tts>=0.1.4

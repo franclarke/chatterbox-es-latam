@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Ruff
+.ruff_cache/
+
+# Output files
+output.wav
+*.wav
+
+# Model files (large)
+*.safetensors
+*.pt
+*.pth
+*.bin
